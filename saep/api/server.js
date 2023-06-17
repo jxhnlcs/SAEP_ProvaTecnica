@@ -45,7 +45,7 @@ app.get('/api/alocacao', (req, res) => {
 app.get('/api/automoveis/:alocacao', (req, res) => {
     const alocacao = req.params.alocacao;
     const query = `
-      SELECT automoveis.modelo, automoveis.preco
+      SELECT automoveis.modelo, automoveis.preco, alocacao.quantidade
       FROM automoveis
       JOIN alocacao ON automoveis.id = alocacao.id
       WHERE alocacao.area = ?
@@ -86,7 +86,6 @@ app.get('/api/automoveis/:alocacao', (req, res) => {
       }
     });
   });
-  
   
 // Inicialização do servidor
 app.listen(PORT, () => {

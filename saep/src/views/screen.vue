@@ -7,18 +7,36 @@
   </div>
 
   <div class="modal" v-if="modalVisivel">
-    <div class="modal-overlay"></div>
-    <div class="modal-content">
-      <h2>Área {{ modalSetor.area }}</h2>
-      <ul>
-        <li v-for="veiculo in modalSetor.veiculos" :key="veiculo.modelo">
-          {{ veiculo.modelo }} - R$ {{ veiculo.preco }}
-          <button @click="abrirModalVenda(veiculo)">Vender</button>
-        </li>
-      </ul>
-      <h2 class="x" @click="fecharModal">Fechar</h2>
-    </div>
+  <div class="modal-overlay"></div>
+  <div class="modal-content">
+    <h2>Área {{ modalSetor.area }}</h2>
+    <template v-if="modalSetor.veiculos.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>Modelo</th>
+            <th>Preço</th>
+            <th>Quantidade</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="veiculo in modalSetor.veiculos" :key="veiculo.modelo">
+            <td>{{ veiculo.modelo }}</td>
+            <td>{{ veiculo.preco }}</td>
+            <td>{{ veiculo.quantidade }}</td>
+            <td>
+              <button @click="abrirModalVenda(veiculo)">Vender</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </template>
+    <template v-else>
+      <p>Não existem veículos aqui</p>
+    </template>
+    <h2 class="x" @click="fecharModal">Fechar</h2>
   </div>
+</div>
 
   <div class="modal" v-if="modalVendaVisivel">
     <div class="modal-overlay"></div>
@@ -118,12 +136,22 @@ export default {
     },
 
     confirmarVenda() {
-      if (this.clienteSelecionado && this.concessionariaSelecionada) {
-        alert("Veículo vendido!");
-      } else {
-        alert("Selecione um cliente e uma concessionária antes de confirmar a venda.");
-      }
       this.fecharModalVenda();
+      this.fecharModal();
+      if (this.clienteSelecionado && this.concessionariaSelecionada) {
+        Swal.fire(
+          'Vendido',
+          'O veículo foi vendido com sucesso',
+          'success'
+        )
+      } else {
+        Swal.fire(
+          'Erro!',
+          'Selecione um cliente e uma concessionária antes de confirmar a venda',
+          'error'
+        )
+      }
+      
     },
 
     carregarClientes() {
@@ -207,19 +235,6 @@ export default {
   background-color: black;
 }
 
-ul {
-  margin-left: -70px;
-}
-
-li {
-  color: black;
-  list-style: none;
-  text-align: justify;
-  display: flex;
-  margin-top: 10px;
-  justify-content: space-between;
-}
-
 label {
   color: black;
 }
@@ -240,6 +255,10 @@ select {
   margin-top: 20px;
 }
 
+.modal-content p, label {
+  font-weight: bold;
+}
+
 .x {
   font-size: 20px;
   border: solid black 2px;
@@ -248,6 +267,14 @@ select {
   border-radius: 20px;
   background-color: red;
   cursor: pointer;
+}
+
+thead tr th {
+  color: black;
+}
+
+tbody tr td {
+  color: black;
 }
 
 @media only screen and (max-width: 600px) {
