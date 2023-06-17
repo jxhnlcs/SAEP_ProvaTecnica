@@ -265,11 +265,12 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 
-select distinct(area) from alocacao;
+
+
+
+/*Inserindo patios vazios */
 
 INSERT INTO `alocacao` (`id`, `area`, `automovel`, `concessionaria`, `quantidade`) VALUES
-(41, 1, 1, 1, 0)
-INSERT INTO `alocacao` (`id`, `area`, `automovel`, `concessionaria`, `quantidade`) VALUES
-(42, 1, 1, 1, 0)
-INSERT INTO `alocacao` (`id`, `area`, `automovel`, `concessionaria`, `quantidade`) VALUES
-(43, 1, 1, 1, 0)
+(41, 1, 1, 1, 0),
+(42, 1, 1, 1, 0),
+(43, 1, 1, 1, 0);
