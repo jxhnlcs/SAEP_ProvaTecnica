@@ -1,5 +1,4 @@
 <template>
-
   <div class="box">
     <h2>Pátios</h2>
     <div v-for="setor in setoresUnicos" :key="setor.area" :class="['setor', setor.cor]" @click="abrirModal(setor)">
@@ -10,7 +9,6 @@
   <div class="modal" v-if="modalVisivel">
     <div class="modal-overlay"></div>
     <div class="modal-content">
-      
       <h2>Área {{ modalSetor.area }}</h2>
       <ul>
         <li v-for="veiculo in modalSetor.veiculos" :key="veiculo.modelo">
@@ -30,21 +28,20 @@
       <p>Preço: R$ {{ modalVendaVeiculo.preco }}</p>
       <label for="cliente">Cliente:</label>
       <select id="cliente" v-model="clienteSelecionado">
-      <option value="">Selecione um cliente</option>
-      <option v-for="cliente in clientes" :value="cliente.id">{{ cliente.clientes }}</option>
-      <!-- Adicione outras opções de cliente aqui -->
-    </select>
+        <option value="">Selecione um cliente</option>
+        <option v-for="cliente in clientes" :value="cliente.id">{{ cliente.clientes }}</option>
+      </select>
 
-    <label for="concessionaria">Concessionária:</label>
-    <select id="concessionaria" v-model="concessionariaSelecionada">
-      <option value="">Selecione uma concessionária</option>
-      <option v-for="concessionaria in concessionarias" :value="concessionaria.id">{{ concessionaria.concessionaria }}</option>
-      <!-- Adicione outras opções de concessionária aqui -->
-    </select>
-    <button class="confirmavenda" @click="confirmarVenda">Confirmar</button>
-    <h2 class="x" @click="fecharModalVenda">Fechar</h2>
+      <label for="concessionaria">Concessionária:</label>
+      <select id="concessionaria" v-model="concessionariaSelecionada">
+        <option value="">Selecione uma concessionária</option>
+        <option v-for="concessionaria in concessionarias" :value="concessionaria.id">{{ concessionaria.concessionaria }}
+        </option>
+      </select>
+      <button class="confirmavenda" @click="confirmarVenda">Confirmar</button>
+      <h2 class="x" @click="fecharModalVenda">Fechar</h2>
     </div>
-    
+
   </div>
 </template>
 
@@ -159,6 +156,7 @@ export default {
   width: 80%;
   margin-left: 100px;
 }
+
 .setor {
   display: inline-block;
   width: 50px;
@@ -208,10 +206,12 @@ export default {
 .bodyFundo {
   background-color: black;
 }
-ul{
+
+ul {
   margin-left: -70px;
 }
-li{
+
+li {
   color: black;
   list-style: none;
   text-align: justify;
@@ -220,27 +220,27 @@ li{
   justify-content: space-between;
 }
 
-label{
+label {
   color: black;
 }
 
-.modalvenda{
+.modalvenda {
   display: flex;
   flex-direction: column;
 }
 
-select{
+select {
   padding: 15px;
   border-radius: 10px;
 }
 
-.confirmavenda{
+.confirmavenda {
   border: solid 2px black;
   background-color: blue;
   margin-top: 20px;
 }
 
-.x{
+.x {
   font-size: 20px;
   border: solid black 2px;
   width: 40%;
@@ -251,12 +251,12 @@ select{
 }
 
 @media only screen and (max-width: 600px) {
-  .box{
+  .box {
     margin-left: 0px;
   }
-  .modal-content{
+
+  .modal-content {
     width: 60%;
     margin-right: 20px;
   }
-}
-</style>
+}</style>
