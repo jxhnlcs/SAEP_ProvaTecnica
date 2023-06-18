@@ -45,7 +45,7 @@ app.get('/api/alocacao', (req, res) => {
 app.get('/api/automoveis/:alocacao', (req, res) => {
     const alocacao = req.params.alocacao;
     const query = `
-      SELECT automoveis.modelo, automoveis.preco, alocacao.quantidade
+      SELECT automoveis.id, automoveis.modelo, automoveis.preco, alocacao.quantidade
       FROM automoveis
       JOIN alocacao ON automoveis.id = alocacao.id
       WHERE alocacao.area = ?
@@ -84,6 +84,22 @@ app.get('/api/automoveis/:alocacao', (req, res) => {
       } else {
         res.json(results);
       }
+    });
+  });
+
+  app.put('/api/vendas/:automovelId', (req, res) => {
+    const automovelId = req.params.automovelId;
+  
+    const updateQuery = `UPDATE alocacao SET quantidade = quantidade - 1 WHERE automovel = ${automovelId}`;
+  
+    connection.query(updateQuery, (error, results) => {
+      if (error) {
+        console.error('Erro ao atualizar a quantidade do automóvel:', error);
+        res.status(500).json({ error: 'Erro ao atualizar a quantidade do automóvel' });
+        return;
+      }
+  
+      res.status(200).json({ message: 'Quantidade do automóvel atualizada com sucesso' });
     });
   });
   

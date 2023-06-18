@@ -42,8 +42,8 @@
     <div class="modal-overlay"></div>
     <div class="modal-content modalvenda" @click.stop>
       <h2>Venda de Veículo</h2>
-      <p>Modelo: {{ modalVendaVeiculo.modelo }}</p>
-      <p>Preço: R$ {{ modalVendaVeiculo.preco }}</p>
+      <p>Modelo: {{ carroSelecionado.modelo }}</p>
+      <p>Preço: R$ {{ carroSelecionado.preco }}</p>
       <label for="cliente">Cliente:</label>
       <select id="cliente" v-model="clienteSelecionado">
         <option value="">Selecione um cliente</option>
@@ -75,7 +75,8 @@ export default {
       clienteSelecionado: "",
       concessionariaSelecionada: "",
       clientes: [],
-      concessionarias: []
+      concessionarias: [],
+      carroSelecionado: null,
     };
   },
   computed: {
@@ -128,6 +129,7 @@ export default {
     abrirModalVenda(veiculo) {
       this.modalVendaVisivel = true;
       this.modalVendaVeiculo = veiculo;
+      this.carroSelecionado = veiculo;
     },
 
     fecharModalVenda() {
@@ -143,7 +145,19 @@ export default {
           'Vendido',
           'O veículo foi vendido com sucesso',
           'success'
-        )
+        ).then(() =>{
+          const automovelId = this.carroSelecionado.id;
+          fetch(`http://localhost:3000/api/vendas/${automovelId}`,{
+            method: 'PUT'
+          })
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+          })
+          .catch(error => {
+            console.error("Erro ao atualizar a quantidade do automóvel:", error);
+          });
+        })
       } else {
         Swal.fire(
           'Erro!',
@@ -193,8 +207,10 @@ export default {
   text-align: center;
   line-height: 50px;
   font-weight: bold;
+  font-size: 30px;
   cursor: pointer;
   padding: 70px;
+  border-radius: 15px;
 }
 
 .azul {
