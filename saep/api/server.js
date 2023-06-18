@@ -87,6 +87,24 @@ app.get('/api/automoveis/:alocacao', (req, res) => {
     });
   });
 
+  app.get('/api/concessionaria/:veiculoId', (req, res) => {
+    const veiculoId = req.params.veiculoId;
+    const query = 'SELECT c.concessionaria FROM alocacao c INNER JOIN alocacao a ON c.id = a.concessionaria WHERE a.automovel = ?';
+    
+    connection.query(query, [veiculoId], (error, results) => {
+      if (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Erro ao consultar a concessionária do veículo.' });
+      } else if (results.length === 0) {
+        res.status(404).json({ error: 'Concessionária não encontrada para o veículo especificado.' });
+      } else {
+        const concessionaria = results[0].concessionaria;
+        res.json({ concessionaria });
+      }
+    });
+  });
+  
+
   app.put('/api/vendas/:automovelId', (req, res) => {
     const automovelId = req.params.automovelId;
   
@@ -102,6 +120,7 @@ app.get('/api/automoveis/:alocacao', (req, res) => {
       res.status(200).json({ message: 'Quantidade do automóvel atualizada com sucesso' });
     });
   });
+
   
 // Inicialização do servidor
 app.listen(PORT, () => {
