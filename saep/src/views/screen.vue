@@ -37,7 +37,7 @@
     <template v-else>
       <p>Não existem veículos aqui</p>
     </template>
-    <h2 class="close-btn" @click="fecharModal">Fechar</h2>
+    <h3 class="close-btn" @click="fecharModal">Fechar</h3>
   </div>
 </div>
 
@@ -252,6 +252,9 @@ export default {
 .modal-content h2,
 .modal-content p {
   color: black;
+}
+
+.modal-content h2{
   cursor: default;
 }
 
