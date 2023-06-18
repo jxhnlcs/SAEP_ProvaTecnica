@@ -286,7 +286,7 @@ select {
 
 .table th,
 .table td {
-  padding: 6px 2px;
+  padding: 6px 10px;
   text-align: center;
   cursor: default;
 }
