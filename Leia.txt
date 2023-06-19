@@ -1,0 +1,14 @@
+Algumas instruções
+
+1.Na pasta diagramas tem arquivos png, e docx dos diagramas.
+
+2.No database.sql tem as queries para serem colocadas no script no gerenciador de banco de dados
+
+3.A pasta saep tem todo o sistema front-end quanto back-end
+
+4.O arquivo README.md é o arquivo do github com as instruções de como executar o sistema
+
+5.E tem um vídeo que gravei para mostrar o sistema, caso ocorra algum problema
+
+Aluno: John Lucas
+Curso: Desenvolvimento de Sistemas SENAI
