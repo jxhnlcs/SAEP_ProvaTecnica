@@ -92,7 +92,6 @@ app.get('/api/concessionaria/:automovelId', (req, res) => {
   });
 });
 
-
 app.put('/api/vendas/:automovelId', (req, res) => {
   const automovelId = req.params.automovelId;
 
@@ -108,9 +107,6 @@ app.put('/api/vendas/:automovelId', (req, res) => {
     res.status(200).json({ message: 'Quantidade do automóvel atualizada com sucesso' });
   });
 });
-
-
-
 
 // Inicialização do servidor
 app.listen(PORT, () => {
