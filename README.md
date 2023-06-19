@@ -27,6 +27,10 @@ const connection = mysql.createConnection({
 - Após ter feito os passos acima rode os seguintes comandos abaixo no terminal para instalar as dependencias do backend e rodar o servidor:
 
 ```shell
+cd saep
+```
+
+```shell
 cd api
 ```
 
@@ -41,6 +45,10 @@ node server.js
 ##### 🖥️: Frontend
 
 Para executar o front end basta rodar os comandos abaixo:
+
+```shell
+cd saep
+```
 
 ```shell
 npm i
