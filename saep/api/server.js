@@ -14,12 +14,12 @@ const connection = mysql.createConnection({
 
 // Conectar-se ao banco de dados
 connection.connect((err) => {
-    if (err) {
-      console.error('Erro ao conectar-se ao banco de dados:', err);
-    } else {
-      console.log('Conexão com o banco de dados estabelecida com sucesso!');
-    }
-  });
+  if (err) {
+    console.error('Erro ao conectar-se ao banco de dados:', err);
+  } else {
+    console.log('Conexão com o banco de dados estabelecida com sucesso!');
+  }
+});
 
 // Configuração do CORS
 app.use(cors());
@@ -43,75 +43,75 @@ app.get('/api/alocacao', (req, res) => {
 });
 
 app.get('/api/automoveis/:alocacao', (req, res) => {
-    const alocacao = req.params.alocacao;
-    const query = `
+  const alocacao = req.params.alocacao;
+  const query = `
       SELECT automoveis.id, automoveis.modelo, automoveis.preco, alocacao.quantidade
       FROM automoveis
       JOIN alocacao ON automoveis.id = alocacao.id
       WHERE alocacao.area = ?
     `;
-  
-    connection.query(query, [alocacao], (error, results) => {
-      if (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Erro ao consultar os veículos.' });
-      } else {
-        res.json(results);
-      }
-    });
+
+  connection.query(query, [alocacao], (error, results) => {
+    if (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Erro ao consultar os veículos.' });
+    } else {
+      res.json(results);
+    }
   });
+});
 
-  app.get('/api/clientes', (req, res) => {
-    const query = 'SELECT * FROM clientes';
-  
-    connection.query(query, (error, results) => {
-      if (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Erro ao consultar os clientes.' });
-      } else {
-        res.json(results);
-      }
-    });
+app.get('/api/clientes', (req, res) => {
+  const query = 'SELECT * FROM clientes';
+
+  connection.query(query, (error, results) => {
+    if (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Erro ao consultar os clientes.' });
+    } else {
+      res.json(results);
+    }
   });
+});
 
-  app.get('/api/concessionaria/:automovelId', (req, res) => {
-    const automovelId = req.params.automovelId;
-    const query = `SELECT concessionaria.id, concessionaria.concessionaria FROM alocacao JOIN concessionaria ON concessionaria.id = alocacao.concessionaria WHERE alocacao.automovel = ${automovelId}`;
-    
-    connection.query(query, [automovelId], (error, results) => {
-      if (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Erro ao consultar a concessionária do veículo.' });
-      } else if (results.length === 0) {
-        res.status(404).json({ error: 'Concessionária não encontrada para o veículo especificado.' });
-      } else {
-        res.json(results);
+app.get('/api/concessionaria/:automovelId', (req, res) => {
+  const automovelId = req.params.automovelId;
+  const query = `SELECT concessionaria.id, concessionaria.concessionaria FROM alocacao JOIN concessionaria ON concessionaria.id = alocacao.concessionaria WHERE alocacao.automovel = ${automovelId}`;
 
-        
-      }
-    });
+  connection.query(query, [automovelId], (error, results) => {
+    if (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Erro ao consultar a concessionária do veículo.' });
+    } else if (results.length === 0) {
+      res.status(404).json({ error: 'Concessionária não encontrada para o veículo especificado.' });
+    } else {
+      res.json(results);
+
+
+    }
   });
-  
+});
 
-  app.put('/api/vendas/:automovelId', (req, res) => {
-    const automovelId = req.params.automovelId;
-  
-    const updateQuery = `UPDATE alocacao SET quantidade = quantidade - 1 WHERE automovel = ${automovelId}`;
-  
-    connection.query(updateQuery, (error, results) => {
-      if (error) {
-        console.error('Erro ao atualizar a quantidade do automóvel:', error);
-        res.status(500).json({ error: 'Erro ao atualizar a quantidade do automóvel' });
-        return;
-      }
-  
-      res.status(200).json({ message: 'Quantidade do automóvel atualizada com sucesso' });
-    });
+
+app.put('/api/vendas/:automovelId', (req, res) => {
+  const automovelId = req.params.automovelId;
+
+  const updateQuery = `UPDATE alocacao SET quantidade = quantidade - 1 WHERE automovel = ${automovelId}`;
+
+  connection.query(updateQuery, (error, results) => {
+    if (error) {
+      console.error('Erro ao atualizar a quantidade do automóvel:', error);
+      res.status(500).json({ error: 'Erro ao atualizar a quantidade do automóvel' });
+      return;
+    }
+
+    res.status(200).json({ message: 'Quantidade do automóvel atualizada com sucesso' });
   });
+});
 
-  
 
-  
+
+
 // Inicialização do servidor
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
