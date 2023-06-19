@@ -133,7 +133,6 @@ export default {
       this.modalVendaVisivel = true;
       this.modalVendaVeiculo = veiculo;
       this.carroSelecionado = veiculo;
-      console.log(this.concessionarias)
 
     },
 
@@ -192,8 +191,6 @@ export default {
         .then(response => response.json())
         .then(data => {
           this.concessionarias = data;
-          console.log(this.concessionarias)
-          console.log(automovelId)
         })
         .catch(error => {
           console.error(error);
