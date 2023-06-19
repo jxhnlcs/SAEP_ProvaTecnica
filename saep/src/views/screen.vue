@@ -7,63 +7,63 @@
   </div>
 
   <div class="modal" v-if="modalVisivel">
-  <div class="modal-overlay"></div>
-  <div class="modal-content">
-    <h2>Área {{ modalSetor.area }}</h2>
-    <template v-if="modalSetor.veiculos.length > 0">
-      <div class="tables">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Modelo</th>
-            <th>Preço</th>
-            <th>Quantidade</th>
-            <th>Ação</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="veiculo in modalSetor.veiculos" :key="veiculo.modelo">
-            <td>{{ veiculo.modelo }}</td>
-            <td>{{ veiculo.preco }}</td>
-            <td>{{ veiculo.quantidade }}</td>
-            <td>
-              <button class="btn-vender" @click="abrirModalVenda(veiculo)">Vender</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <h2>Área {{ modalSetor.area }}</h2>
+      <template v-if="modalSetor.veiculos.length > 0">
+        <div class="tables">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Modelo</th>
+                <th>Preço</th>
+                <th>Quantidade</th>
+                <th>Ação</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="veiculo in modalSetor.veiculos" :key="veiculo.modelo">
+                <td>{{ veiculo.modelo }}</td>
+                <td>{{ veiculo.preco }}</td>
+                <td>{{ veiculo.quantidade }}</td>
+                <td>
+                  <button class="btn-vender" @click="abrirModalVenda(veiculo)">Vender</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </template>
+      <template v-else>
+        <p>Não existem veículos aqui</p>
+      </template>
+      <h3 class="close-btn" @click="fecharModal">Fechar</h3>
     </div>
-    </template>
-    <template v-else>
-      <p>Não existem veículos aqui</p>
-    </template>
-    <h3 class="close-btn" @click="fecharModal">Fechar</h3>
   </div>
-</div>
 
 
-<div class="modal" v-if="modalVendaVisivel">
-  <div class="modal-overlay"></div>
-  <div class="modal-content modalvenda" @click.stop>
-    <h2>Venda de Veículo</h2>
-    <p>Modelo: {{ carroSelecionado.modelo }}</p>
-    <p>Preço: R$ {{ carroSelecionado.preco }}</p>
-    <label for="cliente">Cliente:</label>
-    <select id="cliente" v-model="clienteSelecionado">
-      <option value="">Selecione um cliente</option>
-      <option v-for="cliente in clientes" :value="cliente.id">{{ cliente.clientes }}</option>
-    </select>
+  <div class="modal" v-if="modalVendaVisivel">
+    <div class="modal-overlay"></div>
+    <div class="modal-content modalvenda" @click.stop>
+      <h2>Venda de Veículo</h2>
+      <p>Modelo: {{ carroSelecionado.modelo }}</p>
+      <p>Preço: R$ {{ carroSelecionado.preco }}</p>
+      <label for="cliente">Cliente:</label>
+      <select id="cliente" v-model="clienteSelecionado">
+        <option value="">Selecione um cliente</option>
+        <option v-for="cliente in clientes" :value="cliente.id">{{ cliente.clientes }}</option>
+      </select>
 
-    <label for="concessionaria">Concessionária:</label>
-    <select id="concessionaria" v-model="concessionariaSelecionada">
-      <option value="">Selecione uma concessionária</option>
-      <option v-for="concessionaria in concessionarias" :value="concessionaria.id">{{ concessionaria.concessionaria }}</option>
-    </select>
-    <button class="btn-confirmar-venda" @click="confirmarVenda">Confirmar</button>
-    <h2 class="close-btn" @click="fecharModalVenda">Fechar</h2>
+      <label for="concessionaria">Concessionária:</label>
+      <select id="concessionaria" v-model="concessionariaSelecionada">
+        <option value="">Selecione uma concessionária</option>
+        <option v-for="concessionaria in concessionarias" :value="concessionaria.id">{{ concessionaria.concessionaria }}
+        </option>
+      </select>
+      <button class="btn-confirmar-venda" @click="confirmarVenda">Confirmar</button>
+      <h2 class="close-btn" @click="fecharModalVenda">Fechar</h2>
+    </div>
   </div>
-</div>
-
 </template>
 
 <script>
@@ -79,7 +79,7 @@ export default {
       concessionariaSelecionada: "",
       clientes: [],
       concessionarias: [],
-      carroSelecionado: null,
+      carroSelecionado: '',
     };
   },
   computed: {
@@ -100,7 +100,6 @@ export default {
   mounted() {
     this.carregarSetores();
     this.carregarClientes();
-    this.carregarConcessionarias();
   },
   methods: {
     carregarSetores() {
@@ -130,9 +129,12 @@ export default {
       this.modalSetor = null;
     },
     abrirModalVenda(veiculo) {
+      this.carregarConcessionarias(veiculo.id);
       this.modalVendaVisivel = true;
       this.modalVendaVeiculo = veiculo;
       this.carroSelecionado = veiculo;
+      console.log(this.concessionarias)
+
     },
 
     fecharModalVenda() {
@@ -148,20 +150,20 @@ export default {
           'Vendido',
           'O veículo foi vendido com sucesso',
           'success'
-        ).then(() =>{
+        ).then(() => {
           const automovelId = this.carroSelecionado.id;
-          fetch(`http://localhost:3000/api/vendas/${automovelId}`,{
+          fetch(`http://localhost:3000/api/vendas/${automovelId}`, {
             method: 'PUT'
           })
-          .then(response => response.json())
-          .then(data => {
-            console.log(data);
-            this.clienteSelecionado = "";
-          this.concessionariaSelecionada = "";
-          })
-          .catch(error => {
-            console.error("Erro ao atualizar a quantidade do automóvel:", error);
-          });
+            .then(response => response.json())
+            .then(data => {
+              console.log(data);
+              this.clienteSelecionado = "";
+              this.concessionariaSelecionada = "";
+            })
+            .catch(error => {
+              console.error("Erro ao atualizar a quantidade do automóvel:", error);
+            });
         })
       } else {
         Swal.fire(
@@ -170,7 +172,7 @@ export default {
           'error'
         )
       }
-      
+
     },
 
     carregarClientes() {
@@ -184,11 +186,14 @@ export default {
         });
     },
 
-    carregarConcessionarias() {
-      fetch('http://localhost:3000/api/concessionaria')
+    carregarConcessionarias(veiculo) {
+      const automovelId = veiculo;
+      fetch(`http://localhost:3000/api/concessionaria/${automovelId}`)
         .then(response => response.json())
         .then(data => {
           this.concessionarias = data;
+          console.log(this.concessionarias)
+          console.log(automovelId)
         })
         .catch(error => {
           console.error(error);
@@ -241,8 +246,10 @@ export default {
 }
 
 .modal-content {
-  max-width: 90%; /* Define a largura máxima do modal */
-  margin: 0 auto; /* Centraliza o modal horizontalmente */
+  max-width: 90%;
+  /* Define a largura máxima do modal */
+  margin: 0 auto;
+  /* Centraliza o modal horizontalmente */
   border-radius: 30px;
   background-color: white;
   padding: 30px;
@@ -254,7 +261,7 @@ export default {
   color: black;
 }
 
-.modal-content h2{
+.modal-content h2 {
   cursor: default;
 }
 
@@ -272,14 +279,15 @@ select {
   border-radius: 10px;
 }
 
-.modal-content p, label {
+.modal-content p,
+label {
   font-weight: bold;
 }
 
 .table {
   width: 100%;
   border-collapse: collapse;
-  table-layout:auto;
+  table-layout: auto;
   font-family: Arial, sans-serif;
 }
 
@@ -422,9 +430,8 @@ tbody tr td {
     width: 100%;
   }
 
-  .table{
+  .table {
     table-layout: fixed;
   }
-  
-}
-</style>
+
+}</style>
